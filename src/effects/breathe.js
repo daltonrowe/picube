@@ -1,0 +1,25 @@
+class BreatheEffect {
+  channelArray = null;
+
+  constructor(channel, options = {
+    color: 0x6545B2
+  }) {
+    this.channel = channel
+
+    for (let i = 0; i < this.channel.array.length; i++) {
+      this.channel.array[i] = options.color;
+    }
+  }
+
+  mutate() {
+    const freq = 2000
+    const ratio = Math.abs(Math.sin(Date.now() / freq * 2));
+    const value = Math.floor(255 * ratio)
+
+    this.channel.brightness = value;
+  }
+}
+
+module.exports = {
+  BreatheEffect
+};

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script>
+      // hacking my own requirejs
+      window.module = { exports: {} };
+      window.requires = {};
+    </script>
+
+    <script src="../src/lights.js"></script>
+    <script>
+      window.requires.Lights = window.module.exports.Lights;
+    </script>
+
+    <script src="../src/effects/default.js"></script>
+    <script>
+      window.requires.DefaultEffect = window.module.exports.DefaultEffect;
+    </script>
+
+    <script src="../src/effects/breathe.js"></script>
+    <script>
+      window.requires.BreatheEffect = window.module.exports.BreatheEffect;
+    </script>
+
+    <script src="./main.js" defer></script>
+
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: #222;
+      }
+
+      #leds {
+        display: flex;
+        gap: 1px;
+        opacity: calc(var(--brightness) / 255);
+      }
+
+      .pixel {
+        width: 20px;
+        height: 20px;
+        background-color: var(--color);
+      }
+    </style>
+  </head>
+  <body></body>
+</html>

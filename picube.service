@@ -1,0 +1,18 @@
+[Unit]
+Description=picube
+
+[Service]
+ExecStart=/usr/local/bin/node /home/picube/picube/src/index.js
+Restart=always
+RestartSec=10
+
+# Output to syslog
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=picube-service
+Environment=
+
+User=root
+
+[Install]
+WantedBy=multi-user.target

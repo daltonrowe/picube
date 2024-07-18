@@ -1,0 +1,54 @@
+### Install Node via NVM ###
+
+# install script
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+
+# reload bash path
+
+source ~/.bashrc
+
+# install a node version
+
+nvm install 12
+
+# link node for use by root
+
+sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/node" "/usr/local/bin/node"
+sudo ln -s "$NVM_DIR/versions/node/$(nvm version)/bin/npm" "/usr/local/bin/npm"
+
+### Support GPIO shutdown ###
+
+sudo nano /boot/config.txt
+
+dtoverlay=gpio-shutdown
+
+### Enable WS2812 ###
+
+sudo nano /boot/config.txt
+
+dtparam=spi=on
+core_freq=250
+# comment out dtparam=audio=on
+
+### Install ###
+
+# copy project to to local user via sftp
+
+npm install
+
+### Test ###
+
+sudo node src/index.js
+
+### Setup Services ###
+
+sudo nano /lib/systemd/system/picube.service
+
+sudo systemctl daemon-reload
+sudo systemctl enable picube
+sudo systemctl start picube
+
+# view logs
+
+journalctl -u picube.service
