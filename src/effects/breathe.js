@@ -13,7 +13,7 @@ class BreatheEffect {
 
   mutate() {
     const freq = 2000
-    const ratio = Math.abs(Math.sin(Date.now() / freq * 2));
+    const ratio = Math.cos(Date.now() / freq * 2) * .5 + 0.5;
     const value = Math.floor(255 * ratio)
 
     this.channel.brightness = value;

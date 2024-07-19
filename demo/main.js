@@ -1,3 +1,9 @@
+const effects = {
+  default: window.requires.DefaultEffect,
+  breathe: window.requires.BreatheEffect,
+  upanddown: window.requires.UpAndDownEffect
+}
+
 const numLeds = 42
 const speed = 20
 
@@ -12,21 +18,27 @@ function setup(numLeds) {
     leds.appendChild(led)
   }
 
+  const selector = document.createElement('select');
+  selector.id = 'effects'
+
+  for (const effectName in effects) {
+    const option = document.createElement('option')
+    option.value = effectName
+    option.text = effectName
+    selector.appendChild(option)
+  }
+
+  document.body.appendChild(selector)
   document.body.appendChild(leds)
-  return leds;
+  return [leds, selector];
 }
 
-const leds = setup(numLeds)
+const [leds, selector] = setup(numLeds)
 const pixels = document.querySelectorAll('.pixel')
-
-const effects = {
-  default: window.requires.DefaultEffect,
-  breathe: window.requires.BreatheEffect
-}
 
 const channel = {
   array: new Array(numLeds),
-  brightness: 50
+  brightness: 255
 }
 
 const ws281x = {
@@ -44,5 +56,8 @@ const ws281x = {
 }
 
 const lights = new Lights(numLeds, ws281x, channel, effects, speed)
-lights.setEffect('breathe')
 lights.start()
+
+selector.addEventListener('change', (event) => {
+  lights.setEffect(event.target.value)
+})

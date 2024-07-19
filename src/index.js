@@ -2,6 +2,7 @@ const ws281x = require("rpi-ws281x-native");
 const { Lights } = require('./lights')
 const { DefaultEffect } = require('./effects/default')
 const { BreatheEffect } = require('./effects/breathe')
+const { UpAndDownEffect } = require('./effects/upanddown')
 
 const numLeds = 42;
 
@@ -11,7 +12,8 @@ const channel = ws281x(numLeds, {
 
 const effects = {
   default: DefaultEffect,
-  breathe: BreatheEffect
+  breathe: BreatheEffect,
+  upanddown: UpAndDownEffect
 }
 
 const lights = new Lights(42, ws281x, channel, effects, 20)
@@ -39,7 +41,7 @@ setInterval(() => {
   });
 }, 500);
 
-lights.setEffect('breathe')
+lights.setEffect('upanddown')
 lights.start()
 
 function exit() {

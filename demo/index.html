@@ -26,6 +26,11 @@
       window.requires.BreatheEffect = window.module.exports.BreatheEffect;
     </script>
 
+    <script src="../src/effects/upanddown.js"></script>
+    <script>
+      window.requires.UpAndDownEffect = window.module.exports.UpAndDownEffect;
+    </script>
+
     <script src="./main.js" defer></script>
 
     <style>
@@ -47,6 +52,13 @@
         width: 20px;
         height: 20px;
         background-color: var(--color);
+      }
+
+      #effects {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
       }
     </style>
   </head>
