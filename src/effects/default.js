@@ -1,13 +1,10 @@
 class DefaultEffect {
   numLeds = null;
 
-  lastColor = 'r';
+  lastColor = 0;
+  lastTime = 0;
 
-  colors = {
-    r: 0xff0000,
-    g: 0x00ff00,
-    b: 0x0000ff
-  }
+  colors = [0xff0000, 0x00ff00, 0x0000ff]
 
   channel = null;
 
@@ -16,20 +13,17 @@ class DefaultEffect {
   }
 
   mutate() {
-    let newColor = 'r';
+    const freq = 1000
+    const now = Date.now()
+    const since = now - this.lastTime;
 
-    switch (this.lastColor) {
-      case 'r':
-        newColor = 'g'
-        break;
+    let newColor = this.lastColor
 
-      case 'g':
-        newColor = 'b'
-        break;
+    if (since >= freq) {
+      this.lastTime = now
 
-      case 'b':
-        newColor = 'r'
-        break;
+      newColor += 1
+      if (newColor >= this.colors.length) newColor = 0;
     }
 
     const colorHex = this.colors[newColor]

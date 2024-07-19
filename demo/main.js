@@ -1,7 +1,8 @@
 const effects = {
   default: window.requires.DefaultEffect,
   breathe: window.requires.BreatheEffect,
-  upanddown: window.requires.UpAndDownEffect
+  upanddown: window.requires.UpAndDownEffect,
+  nightride: window.requires.NightRideEffect
 }
 
 const numLeds = 42

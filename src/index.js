@@ -3,6 +3,7 @@ const { Lights } = require('./lights')
 const { DefaultEffect } = require('./effects/default')
 const { BreatheEffect } = require('./effects/breathe')
 const { UpAndDownEffect } = require('./effects/upanddown')
+const { NightRideEffect } = require('./effects/nightride')
 
 const numLeds = 42;
 
@@ -13,7 +14,8 @@ const channel = ws281x(numLeds, {
 const effects = {
   default: DefaultEffect,
   breathe: BreatheEffect,
-  upanddown: UpAndDownEffect
+  upanddown: UpAndDownEffect,
+  nightride: NightRideEffect
 }
 
 const lights = new Lights(42, ws281x, channel, effects, 20)
@@ -41,7 +43,7 @@ setInterval(() => {
   });
 }, 500);
 
-lights.setEffect('upanddown')
+lights.setEffect('nightride')
 lights.start()
 
 function exit() {
