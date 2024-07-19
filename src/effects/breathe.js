@@ -1,6 +1,4 @@
 class BreatheEffect {
-  channelArray = null;
-
   constructor(channel, options = {
     color: 0x6545B2
   }) {
