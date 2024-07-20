@@ -1,9 +1,9 @@
 const ws281x = require("rpi-ws281x-native");
-const { Lights } = require('./lights')
-const { DefaultEffect } = require('./effects/default')
-const { BreatheEffect } = require('./effects/breathe')
-const { UpAndDownEffect } = require('./effects/upanddown')
-const { NightRideEffect } = require('./effects/nightride')
+const { Lights } = require("./lights");
+const { DefaultEffect } = require("./effects/default");
+const { BreatheEffect } = require("./effects/breathe");
+const { UpAndDownEffect } = require("./effects/upanddown");
+const { NightRideEffect } = require("./effects/nightride");
 
 const numLeds = 42;
 
@@ -15,10 +15,10 @@ const effects = {
   default: DefaultEffect,
   breathe: BreatheEffect,
   upanddown: UpAndDownEffect,
-  nightride: NightRideEffect
-}
+  nightride: NightRideEffect,
+};
 
-const lights = new Lights(42, ws281x, channel, effects, 20)
+const lights = new Lights(42, ws281x, channel, effects, 20);
 
 const tasks = [
   {
@@ -43,15 +43,15 @@ setInterval(() => {
   });
 }, 500);
 
-lights.setEffect('nightride')
-lights.start()
+lights.setEffect("nightride");
+lights.start();
 
 function exit() {
   lights.stop();
-  ws281x.reset()
+  ws281x.reset();
   process.exit();
 }
 
-process.on('exit', exit);
-process.on('SIGINT', exit);
-process.on('SIGTERM', exit);
+process.on("exit", exit);
+process.on("SIGINT", exit);
+process.on("SIGTERM", exit);
