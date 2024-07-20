@@ -75,7 +75,7 @@ class NightRideEffect {
 
     for (let i = 0; i < this.channel.array.length; i++) {
       const distance = Math.abs(value - i);
-      const choke = -20;
+      const choke = -30;
 
       const newDecRgb = addDecRgb(this.rgb, choke * distance);
       const newHexRgb = decRgbToHexRgb(newDecRgb)
