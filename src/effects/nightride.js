@@ -58,6 +58,8 @@ class NightRideEffect {
     channel,
     options = {
       color: 0xff0000,
+      choke: -30,
+      freq: 2000
     },
   ) {
     this.options = options;
@@ -65,19 +67,16 @@ class NightRideEffect {
 
     const hexColor = this.options.color.toString(16).padStart(6, "0");
     this.rgb = hexRgbToDecRgb(hexStringToHexRgb(hexNumberToString(hexColor)))
-    console.log(this.rgb);
   }
 
   mutate() {
-    const freq = 2000;
-    const ratio = Math.cos((Date.now() / freq) * 2) * 0.5 + 0.5;
+    const ratio = Math.cos((Date.now() / this.options.freq) * 2) * 0.5 + 0.5;
     const value = Math.floor(this.channel.array.length * ratio);
 
     for (let i = 0; i < this.channel.array.length; i++) {
       const distance = Math.abs(value - i);
-      const choke = -30;
 
-      const newDecRgb = addDecRgb(this.rgb, choke * distance);
+      const newDecRgb = addDecRgb(this.rgb, this.options.choke * distance);
       const newHexRgb = decRgbToHexRgb(newDecRgb)
       const newHexString = hexRgbToHexString(newHexRgb)
       const newHexNumber = hexStringToHexNumber(newHexString)

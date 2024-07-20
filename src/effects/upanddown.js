@@ -3,15 +3,15 @@ class UpAndDownEffect {
     channel,
     options = {
       color: 0x6545b2,
-    },
+      freq: 2000,
+    }
   ) {
     this.options = options;
     this.channel = channel;
   }
 
   mutate() {
-    const freq = 2000;
-    const ratio = Math.cos((Date.now() / freq) * 2) * 0.5 + 0.5;
+    const ratio = Math.cos((Date.now() / this.options.freq) * 2) * 0.5 + 0.5;
     const value = Math.floor(this.channel.array.length * ratio);
 
     for (let i = 0; i < this.channel.array.length; i++) {

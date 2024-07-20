@@ -43,7 +43,10 @@ setInterval(() => {
   });
 }, 500);
 
-lights.setEffect("nightride");
+lights.setEffect("nightride", {
+  color: 0x6545b2,
+});
+
 lights.start();
 
 function exit() {
