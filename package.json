@@ -13,8 +13,5 @@
     "node-fetch": "^2.7.0",
     "rpi-softspi": "^1.0.5",
     "rpi-ws281x-native": "1.0.4"
-  },
-  "devDependencies": {
-    "prettier": "3.3.3"
   }
 }
