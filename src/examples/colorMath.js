@@ -1,4 +1,4 @@
-const hexNumber = 0x00dd00;
+const hexNumber = 0x55dd3a;
 
 function clampRgb(byte) {
   return Math.floor(Math.min(Math.max(byte, 0), 255));
@@ -28,6 +28,16 @@ function hexRgbToDecRgb(hexRgb) {
 
 function multiplyDecRgb(decRgb, multiplier) {
   const [r, g, b] = decRgb;
+
+  const newR = clampRgb(r * multiplier);
+  const newG = clampRgb(g * multiplier);
+  const newB = clampRgb(b * multiplier);
+
+  return [newR, newG, newB];
+}
+
+function multiplyHexRgb(hexRgb, multiplier) {
+  const [r, g, b] = hexRgb;
 
   const newR = clampRgb(r * multiplier);
   const newG = clampRgb(g * multiplier);
@@ -93,6 +103,10 @@ const reducedHexNumber = multiplyHexNumber(hexNumber, 0.5);
 const reducedHexString = hexNumberToString(reducedHexNumber);
 
 console.assert(hexNumber === hexNumberReconverted);
+
+const manualHexNumber = hexNumber * 0.5;
+const manualHexString = hexNumberToString(manualHexNumber);
+
 console.table({
   hexNumber,
   hexString,
@@ -107,4 +121,6 @@ console.table({
   hexNumberReconverted,
   reducedHexNumber,
   reducedHexString,
+  manualHexNumber,
+  manualHexString,
 });

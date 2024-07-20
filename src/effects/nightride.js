@@ -1,3 +1,58 @@
+function clampRgb(byte) {
+  return Math.floor(Math.min(Math.max(byte, 0), 255));
+}
+
+function hexNumberToString(hexNumber) {
+  const hexCode = hexNumber.toString(16).padStart(6, "0");
+
+  return hexCode;
+}
+
+function hexStringToHexRgb(hexString) {
+  const r = hexString.substring(0, 2);
+  const g = hexString.substring(2, 4);
+  const b = hexString.substring(4, 6);
+
+  return [r, g, b];
+}
+
+function hexRgbToDecRgb(hexRgb) {
+  const r = parseInt(hexRgb[0], 16);
+  const g = parseInt(hexRgb[1], 16);
+  const b = parseInt(hexRgb[2], 16);
+
+  return [r, g, b];
+}
+
+function addDecRgb(decRgb, adder) {
+  const [r, g, b] = decRgb;
+
+  const newR = clampRgb(r + adder);
+  const newG = clampRgb(g + adder);
+  const newB = clampRgb(b + adder);
+
+  return [newR, newG, newB];
+}
+
+function decRgbToHexRgb(decRgb) {
+  const [r, g, b] = decRgb;
+
+  const newR = r.toString(16).padStart(2, "0");
+  const newG = g.toString(16).padStart(2, "0");
+  const newB = b.toString(16).padStart(2, "0");
+
+  return [newR, newG, newB];
+}
+
+function hexRgbToHexString(hexRgb) {
+  const [r, g, b] = hexRgb;
+
+  return `${r}${g}${b}`;
+}
+
+function hexStringToHexNumber(hexString) {
+  return parseInt(hexString, 16);
+}
 class NightRideEffect {
   constructor(
     channel,
@@ -9,9 +64,8 @@ class NightRideEffect {
     this.channel = channel;
 
     const hexColor = this.options.color.toString(16).padStart(6, "0");
-    this.r = parseInt(`${hexColor[0]}${hexColor[1]}`, 16);
-    this.g = parseInt(`${hexColor[2]}${hexColor[3]}`, 16);
-    this.b = parseInt(`${hexColor[4]}${hexColor[5]}`, 16);
+    this.rgb = hexRgbToDecRgb(hexStringToHexRgb(hexNumberToString(hexColor)))
+    console.log(this.rgb);
   }
 
   mutate() {
@@ -21,22 +75,14 @@ class NightRideEffect {
 
     for (let i = 0; i < this.channel.array.length; i++) {
       const distance = Math.abs(value - i);
-      const falloff = distance / this.channel.array.length;
+      const choke = -20;
 
-      const d = Math.min(255 * falloff, 255);
+      const newDecRgb = addDecRgb(this.rgb, choke * distance);
+      const newHexRgb = decRgbToHexRgb(newDecRgb)
+      const newHexString = hexRgbToHexString(newHexRgb)
+      const newHexNumber = hexStringToHexNumber(newHexString)
 
-      const newR = parseInt(Math.max(this.r - d, 0).toFixed(0), 16).toString(
-        16,
-      );
-      const newG = parseInt(Math.max(this.g - d, 0).toFixed(0), 16).toString(
-        16,
-      );
-      const newB = parseInt(Math.max(this.b - d, 0).toFixed(0), 16).toString(
-        16,
-      );
-
-      const newHex = `${newR}${newG.padStart(2, "0")}${newB.padStart(2, "0")}`;
-      this.channel.array[i] = parseInt(newHex, 16);
+      this.channel.array[i] = newHexNumber
     }
   }
 }
