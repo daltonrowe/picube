@@ -3,6 +3,7 @@ const effects = {
   breathe: window.requires.BreatheEffect,
   upanddown: window.requires.UpAndDownEffect,
   nightride: window.requires.NightRideEffect,
+  rotate: window.requires.RotateEffect,
 };
 
 const numLeds = 42;

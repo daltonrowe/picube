@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,31 +9,40 @@
       // hacking my own requirejs
       window.module = { exports: {} };
       window.requires = {};
+
+      function require(className) {
+        window.requires[className] = window.module.exports[className];
+      }
     </script>
 
     <script src="../src/lights.js"></script>
     <script>
-      window.requires.Lights = window.module.exports.Lights;
+      require("Lights");
     </script>
 
     <script src="../src/effects/default.js"></script>
     <script>
-      window.requires.DefaultEffect = window.module.exports.DefaultEffect;
+      require("DefaultEffect");
     </script>
 
     <script src="../src/effects/breathe.js"></script>
     <script>
-      window.requires.BreatheEffect = window.module.exports.BreatheEffect;
+      require("BreatheEffect");
     </script>
 
     <script src="../src/effects/upanddown.js"></script>
     <script>
-      window.requires.UpAndDownEffect = window.module.exports.UpAndDownEffect;
+      require("UpAndDownEffect");
     </script>
 
     <script src="../src/effects/nightride.js"></script>
     <script>
-      window.requires.NightRideEffect = window.module.exports.NightRideEffect;
+      require("NightRideEffect");
+    </script>
+
+    <script src="../src/effects/rotate.js"></script>
+    <script>
+      require("RotateEffect");
     </script>
 
     <script src="./main.js" defer></script>

@@ -65,8 +65,7 @@ class NightRideEffect {
     this.options = options;
     this.channel = channel;
 
-    const hexColor = this.options.color.toString(16).padStart(6, "0");
-    this.rgb = hexRgbToDecRgb(hexStringToHexRgb(hexNumberToString(hexColor)))
+    this.rgb = hexRgbToDecRgb(hexStringToHexRgb(hexNumberToString(this.options.color)))
   }
 
   mutate() {

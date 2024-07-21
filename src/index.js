@@ -4,6 +4,7 @@ const { DefaultEffect } = require("./effects/default");
 const { BreatheEffect } = require("./effects/breathe");
 const { UpAndDownEffect } = require("./effects/upanddown");
 const { NightRideEffect } = require("./effects/nightride");
+const { RotateEffect } = require("./effects/rotate");
 
 const numLeds = 42;
 
@@ -16,6 +17,7 @@ const effects = {
   breathe: BreatheEffect,
   upanddown: UpAndDownEffect,
   nightride: NightRideEffect,
+  rotate: RotateEffect,
 };
 
 const lights = new Lights(42, ws281x, channel, effects, 20);
