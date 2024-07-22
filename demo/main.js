@@ -57,7 +57,14 @@ const ws281x = {
   },
 };
 
-const lights = new Lights(numLeds, ws281x, channel, effects, speed);
+const lights = new Lights(
+  numLeds,
+  ws281x,
+  channel,
+  window.requires.colorMath,
+  effects,
+  speed
+);
 lights.start();
 
 selector.addEventListener("change", (event) => {

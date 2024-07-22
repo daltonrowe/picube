@@ -8,7 +8,7 @@ class DefaultEffect {
 
   channel = null;
 
-  constructor(channel, _options) {
+  constructor(channel, _colorLib, _options) {
     this.channel = channel;
   }
 

@@ -88,39 +88,7 @@ function multiplyHexNumber(hexNumber, multiplier) {
   return newHexNumber;
 }
 
-const hexString = hexNumberToString(hexNumber);
-const hexRgb = hexStringToHexRgb(hexString);
-const decRgb = hexRgbToDecRgb(hexRgb);
-const reducedDecRgb = multiplyDecRgb(decRgb, 0.5);
-const increasedDecRgb = multiplyDecRgb(decRgb, 1.5);
-const addedDecRgb = addDecRgb(decRgb, 10);
-const subtractedDecRgb = addDecRgb(decRgb, -10);
-const hexRgbReconverted = decRgbToHexRgb(decRgb);
-const hexStringReconverted = hexRgbToHexString(hexRgbReconverted);
-const hexNumberReconverted = hexStringToHexNumber(hexStringReconverted);
-
-const reducedHexNumber = multiplyHexNumber(hexNumber, 0.5);
-const reducedHexString = hexNumberToString(reducedHexNumber);
-
-console.assert(hexNumber === hexNumberReconverted);
-
-console.table({
-  hexNumber,
-  hexString,
-  hexRgb,
-  decRgb,
-  reducedDecRgb,
-  increasedDecRgb,
-  addedDecRgb,
-  subtractedDecRgb,
-  hexRgbReconverted,
-  hexStringReconverted,
-  hexNumberReconverted,
-  reducedHexNumber,
-  reducedHexString,
-});
-
-function rotateDebRgb(decRgb, deg) {
+function rotateDecRgb(decRgb, deg) {
   // https://beesbuzz.biz/code/16-hsv-color-transforms
   // https://github.com/konvajs/konva/blob/master/src/filters/HSV.ts#L17
   const h = deg;
@@ -149,11 +117,61 @@ function rotateDebRgb(decRgb, deg) {
   return [clampRgb(newR), clampRgb(newG), clampRgb(newB)];
 }
 
-const rotatedRgb = rotateDebRgb(decRgb, 360);
-console.table({
-  decRgb,
-  90: rotateDebRgb(decRgb, 90),
-  180: rotateDebRgb(decRgb, 180),
-  270: rotateDebRgb(decRgb, 270),
-  360: rotateDebRgb(decRgb, 360),
-});
+// const hexString = hexNumberToString(hexNumber);
+// const hexRgb = hexStringToHexRgb(hexString);
+// const decRgb = hexRgbToDecRgb(hexRgb);
+// const reducedDecRgb = multiplyDecRgb(decRgb, 0.5);
+// const increasedDecRgb = multiplyDecRgb(decRgb, 1.5);
+// const addedDecRgb = addDecRgb(decRgb, 10);
+// const subtractedDecRgb = addDecRgb(decRgb, -10);
+// const hexRgbReconverted = decRgbToHexRgb(decRgb);
+// const hexStringReconverted = hexRgbToHexString(hexRgbReconverted);
+// const hexNumberReconverted = hexStringToHexNumber(hexStringReconverted);
+
+// const reducedHexNumber = multiplyHexNumber(hexNumber, 0.5);
+// const reducedHexString = hexNumberToString(reducedHexNumber);
+
+// console.assert(hexNumber === hexNumberReconverted);
+
+// console.table({
+//   hexNumber,
+//   hexString,
+//   hexRgb,
+//   decRgb,
+//   reducedDecRgb,
+//   increasedDecRgb,
+//   addedDecRgb,
+//   subtractedDecRgb,
+//   hexRgbReconverted,
+//   hexStringReconverted,
+//   hexNumberReconverted,
+//   reducedHexNumber,
+//   reducedHexString,
+// });
+
+// const rotatedRgb = rotateDebRgb(decRgb, 360);
+
+// console.table({
+//   decRgb,
+//   90: rotateDebRgb(decRgb, 90),
+//   180: rotateDebRgb(decRgb, 180),
+//   270: rotateDebRgb(decRgb, 270),
+//   360: rotateDebRgb(decRgb, 360),
+// });
+
+module.exports = {
+  colorMath: {
+    clampRgb,
+    hexNumberToString,
+    hexStringToHexRgb,
+    hexRgbToDecRgb,
+    multiplyDecRgb,
+    multiplyHexRgb,
+    addDecRgb,
+    decRgbToHexRgb,
+    hexRgbToHexString,
+    hexStringToHexNumber,
+    multiplyHexNumber,
+    rotateDecRgb,
+  },
+};

@@ -6,12 +6,13 @@ class Lights {
   effects = null;
   speed = null;
 
-  constructor(numLeds, ws281x, channel, effects, speed) {
+  constructor(numLeds, ws281x, channel, colorLib, effects, speed) {
     this.numLeds = numLeds;
     this.ws281x = ws281x;
     this.channel = channel;
     this.effects = effects;
     this.speed = speed;
+    this.colorLib = colorLib;
 
     this.setEffect("default", {});
   }
@@ -19,7 +20,8 @@ class Lights {
   setEffect(effectName, effectOptions) {
     this.effectInstance = new this.effects[effectName](
       this.channel,
-      effectOptions,
+      this.colorLib,
+      effectOptions
     );
   }
 

@@ -10,9 +10,14 @@
       window.module = { exports: {} };
       window.requires = {};
 
-      function require(className) {
+      function require(className, all = false) {
         window.requires[className] = window.module.exports[className];
       }
+    </script>
+
+    <script src="../src/lib/colorMath.js"></script>
+    <script>
+      require("colorMath");
     </script>
 
     <script src="../src/lights.js"></script>

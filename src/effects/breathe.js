@@ -1,6 +1,7 @@
 class BreatheEffect {
   constructor(
     channel,
+    _colorLib,
     options = {
       color: 0x6545b2,
       freq: 2000,

@@ -1,4 +1,5 @@
 const ws281x = require("rpi-ws281x-native");
+const colorLib = require("./lib/colorMath");
 const { Lights } = require("./lights");
 const { DefaultEffect } = require("./effects/default");
 const { BreatheEffect } = require("./effects/breathe");
@@ -20,7 +21,7 @@ const effects = {
   rotate: RotateEffect,
 };
 
-const lights = new Lights(42, ws281x, channel, effects, 20);
+const lights = new Lights(42, ws281x, channel, colorLib, effects, 20);
 
 const tasks = [
   {
@@ -45,8 +46,8 @@ setInterval(() => {
   });
 }, 500);
 
-lights.setEffect("nightride", {
-  color: 0x6545b2,
+lights.setEffect("rotate", {
+  color: 0xff0000,
 });
 
 lights.start();
