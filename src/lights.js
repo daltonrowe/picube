@@ -37,6 +37,8 @@ class Lights {
   }
 
   stop() {
+    console.log("stopping");
+
     clearInterval(this.interval);
   }
 }

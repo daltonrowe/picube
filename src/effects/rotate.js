@@ -37,9 +37,9 @@ class RotateEffect {
     const newDecRgb = this.colorLib.rotateDecRgb(this.rgb, deg);
 
     for (let i = 0; i < this.channel.array.length; i++) {
-      const newHexRgb = decRgbToHexRgb(newDecRgb);
-      const newHexString = hexRgbToHexString(newHexRgb);
-      const newHexNumber = hexStringToHexNumber(newHexString);
+      const newHexRgb = this.colorLib.decRgbToHexRgb(newDecRgb);
+      const newHexString = this.colorLib.hexRgbToHexString(newHexRgb);
+      const newHexNumber = this.colorLib.hexStringToHexNumber(newHexString);
 
       this.channel.array[i] = newHexNumber;
     }

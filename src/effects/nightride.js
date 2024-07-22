@@ -26,10 +26,13 @@ class NightRideEffect {
     for (let i = 0; i < this.channel.array.length; i++) {
       const distance = Math.abs(value - i);
 
-      const newDecRgb = addDecRgb(this.rgb, this.options.choke * distance);
-      const newHexRgb = decRgbToHexRgb(newDecRgb);
-      const newHexString = hexRgbToHexString(newHexRgb);
-      const newHexNumber = hexStringToHexNumber(newHexString);
+      const newDecRgb = this.colorLib.addDecRgb(
+        this.rgb,
+        this.options.choke * distance
+      );
+      const newHexRgb = this.colorLib.decRgbToHexRgb(newDecRgb);
+      const newHexString = this.colorLib.hexRgbToHexString(newHexRgb);
+      const newHexNumber = this.colorLib.hexStringToHexNumber(newHexString);
 
       this.channel.array[i] = newHexNumber;
     }
