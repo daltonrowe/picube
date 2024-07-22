@@ -104,23 +104,21 @@ const reducedHexString = hexNumberToString(reducedHexNumber);
 
 console.assert(hexNumber === hexNumberReconverted);
 
-const outputBasic = false;
-outputBasic &&
-  console.table({
-    hexNumber,
-    hexString,
-    hexRgb,
-    decRgb,
-    reducedDecRgb,
-    increasedDecRgb,
-    addedDecRgb,
-    subtractedDecRgb,
-    hexRgbReconverted,
-    hexStringReconverted,
-    hexNumberReconverted,
-    reducedHexNumber,
-    reducedHexString,
-  });
+console.table({
+  hexNumber,
+  hexString,
+  hexRgb,
+  decRgb,
+  reducedDecRgb,
+  increasedDecRgb,
+  addedDecRgb,
+  subtractedDecRgb,
+  hexRgbReconverted,
+  hexStringReconverted,
+  hexNumberReconverted,
+  reducedHexNumber,
+  reducedHexString,
+});
 
 function rotateDebRgb(decRgb, deg) {
   // https://beesbuzz.biz/code/16-hsv-color-transforms
