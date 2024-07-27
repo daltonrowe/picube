@@ -25,11 +25,21 @@ const lights = new Lights(42, ws281x, channel, colorMath, effects, 20);
 
 const tasks = [
   {
-    name: "Check Schedule",
+    name: "Adjust Brightness for Sleeptime",
     last: Date.now(),
-    every: 1000,
+    every: 5000,
     run: () => {
-      // do nothing
+      const date = new Date();
+      const hours = date.getHours();
+
+      let newBrightness = 200;
+      if (hours > 21 || hours < 9) {
+        newBrightness = 10;
+      }
+
+      if (channel.brightness !== newBrightness) {
+        channel.brightness = newBrightness;
+      }
     },
   },
 ];
