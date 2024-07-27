@@ -32,14 +32,11 @@ const tasks = [
       const date = new Date();
       const hours = date.getHours();
 
-      let newBrightness = 200;
-      if (hours > 21 || hours < 9) {
-        newBrightness = 10;
-      }
+      let shouldBePlaying = true;
+      if (hours > 20 || hours < 9) shouldBePlaying = false;
 
-      if (channel.brightness !== newBrightness) {
-        channel.brightness = newBrightness;
-      }
+      if (lights.isPlaying() === false && shouldBePlaying) lights.start();
+      if (lights.isPlaying() === true && !shouldBePlaying) lights.stop();
     },
   },
 ];

@@ -37,9 +37,13 @@ class Lights {
   }
 
   stop() {
-    console.log("stopping");
-
     clearInterval(this.interval);
+    this.interval = null;
+    this.ws281x.reset();
+  }
+
+  isPlaying() {
+    return !!this.interval;
   }
 }
 
