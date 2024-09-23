@@ -1,8 +1,8 @@
 [Unit]
-Description=picube
+Description=picube-lights
 
 [Service]
-ExecStart=/usr/local/bin/node /home/picube/picube/src/index.js
+ExecStart=/usr/local/bin/node /home/picube/picube/lights/src/index.js
 Restart=always
 RestartSec=10
 

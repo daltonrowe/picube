@@ -43,7 +43,7 @@ sudo node src/index.js
 
 ### Setup Services ###
 
-sudo nano /lib/systemd/system/picube.service
+sudo nano /lib/systemd/system/picube-lights.service
 
 sudo systemctl daemon-reload
 sudo systemctl enable picube
