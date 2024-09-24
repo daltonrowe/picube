@@ -1,12 +1,12 @@
 const net = require("net");
 
 const client = net.createConnection("/tmp/picube.sock", () => {
-  client.write("Hello, Unix Socket");
-});
+  const payload = {
+    event: "registration",
+    name: "picubeTestClient",
+  };
 
-client.on("data", (data) => {
-  console.log(data.toString());
-  console.log(JSON.parse(data));
+  client.write(JSON.stringify(payload));
 });
 
 client.on("end", () => {

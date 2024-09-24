@@ -4,12 +4,25 @@ const fs = require("fs");
 const sockExists = fs.existsSync("/tmp/picube.sock");
 if (sockExists) fs.unlinkSync("/tmp/picube.sock");
 
+const clients = new Map();
+
 const server = net.createServer((connection) => {
   connection.on("data", (data) => {
-    console.log("Data from client:", data.toString());
-  });
+    let json;
 
-  connection.write(JSON.stringify({ taco: "bell" }));
+    try {
+      json = JSON.parse(data.toString());
+    } catch (error) {
+      // do nothing
+    }
+
+    if (!json) return;
+
+    if (json.event === "registration" && !clients.get(json.name)) {
+      clients.set(json.name, connection);
+      console.log(`new client: ${json.name}`);
+    }
+  });
 });
 
 server.listen("/tmp/picube.sock", () => {});
