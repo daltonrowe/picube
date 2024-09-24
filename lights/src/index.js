@@ -23,6 +23,8 @@ const effects = {
 
 const lights = new Lights(42, ws281x, channel, colorMath, effects, 20);
 
+let daytime = true;
+
 const tasks = [
   {
     name: "Adjust Brightness for Sleeptime",
@@ -32,11 +34,10 @@ const tasks = [
       const date = new Date();
       const hours = date.getHours();
 
-      let shouldBePlaying = true;
-      if (hours > 20 || hours < 9) shouldBePlaying = false;
+      if (hours > 20 || hours < 8) daytime = false;
 
-      if (lights.isPlaying() === false && shouldBePlaying) lights.start();
-      if (lights.isPlaying() === true && !shouldBePlaying) lights.stop();
+      if (lights.isPlaying() === false && daytime) lights.start();
+      if (lights.isPlaying() === true && !daytime) lights.stop();
     },
   },
 ];
