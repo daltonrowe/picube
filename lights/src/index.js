@@ -23,36 +23,23 @@ const effects = {
 
 const lights = new Lights(42, ws281x, channel, colorMath, effects, 20);
 
-let daytime = true;
+let nightTime = true;
+updateDaytime();
 
-const tasks = [
-  {
-    name: "Adjust Brightness for Sleeptime",
-    last: Date.now(),
-    every: 5000,
-    run: () => {
-      const date = new Date();
-      const hours = date.getHours();
+const updateDaytime = () => {
+  const date = new Date();
+  const hours = date.getHours();
 
-      if (hours > 20 || hours < 8) daytime = false;
+  nightTime = hours > 20 || hours < 8 ? false : true;
+};
 
-      if (lights.isPlaying() === false && daytime) lights.start();
-      if (lights.isPlaying() === true && !daytime) lights.stop();
-    },
-  },
-];
-
+// turns lights on or off at night
 setInterval(() => {
-  tasks.forEach((task) => {
-    const now = Date.now();
-    const since = now - task.last;
+  updateDaytime();
 
-    if (since > task.every) {
-      task.last = now;
-      task.run();
-    }
-  });
-}, 500);
+  if (lights.isPlaying() === false && !nightTime) lights.start();
+  if (lights.isPlaying() === true && nightTime) lights.stop();
+}, 5000);
 
 lights.setEffect("rotate");
 
