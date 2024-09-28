@@ -18,8 +18,6 @@ class Lights {
   }
 
   setEffect(effectName, effectOptions) {
-    console.log(effectOptions);
-
     this.effectInstance = new this.effects[effectName](
       this.channel,
       this.colorLib,
