@@ -14,10 +14,12 @@ class Lights {
     this.speed = speed;
     this.colorLib = colorLib;
 
-    this.setEffect("default", {});
+    this.setEffect("default");
   }
 
   setEffect(effectName, effectOptions) {
+    console.log(effectOptions);
+
     this.effectInstance = new this.effects[effectName](
       this.channel,
       this.colorLib,

@@ -1,9 +1,10 @@
 const effects = {
-  default: window.requires.DefaultEffect,
+  default: window.requires.BoilEffect,
   breathe: window.requires.BreatheEffect,
   upanddown: window.requires.UpAndDownEffect,
   nightride: window.requires.NightRideEffect,
   rotate: window.requires.RotateEffect,
+  boil: window.requires.BoilEffect,
 };
 
 const numLeds = 42;
