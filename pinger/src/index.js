@@ -1,8 +1,9 @@
 const fetch = require('node-fetch')
 require('dotenv').config()
 
-const LATENCY_INTERVAL = parseInt(process.env.LATENCY_INTERVAL)
 const PING_INTERVAL = parseInt(process.env.PING_INTERVAL)
+const PING_RESOLUTION = parseInt(process.env.PING_RESOLUTION)
+const LATENCY_INTERVAL = parseInt(process.env.LATENCY_INTERVAL)
 
 let lastSuccess = new Date().getTime();
 const successTimings = [];
@@ -70,6 +71,13 @@ async function ping() {
 
 }
 
+let last = new Date().getTime();
+
 setInterval(async () => {
-  await ping();
-}, PING_INTERVAL);
+  const now = new Date().getTime();
+
+  if (now - last > PING_INTERVAL) {
+    last = now;
+    await ping();
+  }
+}, PING_RESOLUTION);
