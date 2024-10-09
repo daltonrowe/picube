@@ -1,0 +1,20 @@
+[Unit]
+Description=picube-pinger
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+EnvironmentFile=-/home/picube/picube/pinger/.env
+ExecStart=/usr/local/bin/node /home/picube/picube/pinger/src/index.js
+Restart=always
+RestartSec=10
+
+# Output to syslog
+StandardError=syslog
+SyslogIdentifier=picube-pinger
+Environment=
+
+User=picube
+
+[Install]
+WantedBy=multi-user.target

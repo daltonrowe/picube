@@ -9,7 +9,7 @@ RestartSec=10
 # Output to syslog
 StandardOutput=syslog
 StandardError=syslog
-SyslogIdentifier=picube-service
+SyslogIdentifier=picube-lights
 Environment=
 
 User=root
