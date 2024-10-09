@@ -68,7 +68,6 @@ async function ping() {
   }
 
   lastSuccess = time;
-
 }
 
 let last = new Date().getTime();
