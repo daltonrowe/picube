@@ -6,12 +6,12 @@ const { power, loadStates, getNodes } = require('./api')
 
 const stateTarget = {
   nightTime: false,
-  wleds: {},
-}
-
-for (const wled of config.wleds) {
-  stateTarget.wleds[wled.label] = { ...wled }
-  stateTarget.wleds[wled.label].state = {}
+  wleds: {
+    rswled: {
+      url: 'http://rswled.local',
+      label: 'rswled'
+    }
+  },
 }
 
 const state = new Proxy(stateTarget, {
@@ -44,9 +44,7 @@ setInterval(async () => {
 
   if (firstRun) {
     firstRun = false
-    const res = await getNodes(state.wleds['rswled'].url)
-    console.log(res);
-
+    await loadStates(state.wleds)
   }
 
   const updatePromises = []
