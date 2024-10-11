@@ -35,8 +35,12 @@ async function loadStates(wleds) {
     const wled = wleds[label]
     const res = await getState(wled.url);
     wled.state = res;
-
   }
+}
+
+async function getNodes(url) {
+  const res = await fetch(`${url}/json/nodes`)
+  return await res.json();
 }
 
 module.exports = {
@@ -45,5 +49,6 @@ module.exports = {
   post,
   get,
   getState,
-  loadStates
+  loadStates,
+  getNodes
 }

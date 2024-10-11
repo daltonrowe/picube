@@ -1,8 +1,8 @@
 // https://kno.wled.ge/interfaces/json-api/
 
 const fs = require('fs');
-const { power, loadStates } = require('./api')
-const config = JSON.parse(fs.readFileSync('../config.json'));
+const path = require('path');
+const { power, loadStates, getNodes } = require('./api')
 
 const stateTarget = {
   nightTime: false,
@@ -24,7 +24,8 @@ const updateNighttime = () => {
   const date = new Date();
   const hours = date.getHours();
 
-  state.nightTime = hours > 20 || hours < 8 ? false : true;
+  // state.nightTime = hours > 20 || hours < 8 ? false : true;
+  state.nightTime = !state.nightTime
 };
 
 updateNighttime();
@@ -43,7 +44,9 @@ setInterval(async () => {
 
   if (firstRun) {
     firstRun = false
-    await loadStates(state.wleds)
+    const res = await getNodes(state.wleds['rswled'].url)
+    console.log(res);
+
   }
 
   const updatePromises = []
