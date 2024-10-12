@@ -20,8 +20,7 @@ const updateNighttime = () => {
   const date = new Date();
   const hours = date.getHours();
 
-  // state.nightTime = hours > 20 || hours < 8 ? false : true;
-  state.nightTime = !state.nightTime
+  state.nightTime = hours > 18 ? false : true;
 };
 
 updateNighttime();
@@ -63,6 +62,8 @@ setInterval(async () => {
     last = now
   }
 
+  // need to wait for all the network reqs to complete
+  // esp32 can be slow to respond
   if (updatePromises.length) {
     await Promise.allSettled(updatePromises);
   }
