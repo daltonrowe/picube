@@ -1,0 +1,20 @@
+[Unit]
+Description=picube-wled-control
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+EnvironmentFile=-/home/picube/picube/wled-control/.env
+ExecStart=/usr/local/bin/node /home/picube/picube/wled-control/src/index.js
+Restart=always
+RestartSec=10
+
+# Output to syslog
+StandardError=syslog
+SyslogIdentifier=picube-wled-control
+Environment=
+
+User=picube
+
+[Install]
+WantedBy=multi-user.target
