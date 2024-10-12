@@ -1,5 +1,7 @@
+const fetch = require('node-fetch')
+
 async function post(url, data) {
-  const res = await fetch(url, {
+  const res = await fetch(`http://${process.env.HOST_NODE}${url}`, {
     method: 'POST',
     headers: {
       "Content-Type": 'application/json'
@@ -11,36 +13,26 @@ async function post(url, data) {
 }
 
 async function get(url) {
-  const res = await fetch(url)
+  const res = await fetch(`http://${process.env.HOST_NODE}${url}`)
   return await res.json();
 }
 
-async function toggle(url) {
+async function toggle() {
   const data = { "on": "t" }
-  return await post(`${url}/json/state`, data)
+  return await post(`/json/state`, data)
 }
 
-async function power(url, bool) {
+async function power(bool) {
   const data = { "on": bool }
-  return await post(`${url}/json/state`, data)
+  return await post(`/json/state`, data)
 }
 
-async function getState(url) {
-  const data = { "on": "t" }
-  return await get(`${url}/json/state`, data)
+async function getState() {
+  return await get(`/json/state`)
 }
 
-async function loadStates(wleds) {
-  for (const label in wleds) {
-    const wled = wleds[label]
-    const res = await getState(wled.url);
-    wled.state = res;
-  }
-}
-
-async function getNodes(url) {
-  const res = await fetch(`${url}/json/nodes`)
-  return await res.json();
+async function getNodes() {
+  return await get(`/json/nodes`);
 }
 
 module.exports = {
@@ -49,6 +41,5 @@ module.exports = {
   post,
   get,
   getState,
-  loadStates,
   getNodes
 }

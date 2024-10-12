@@ -1,17 +1,13 @@
 // https://kno.wled.ge/interfaces/json-api/
 
-const fs = require('fs');
-const path = require('path');
-const { power, loadStates, getNodes } = require('./api')
+require("dotenv").config();
+
+const { power, getState, getNodes } = require('./api')
 
 const stateTarget = {
   nightTime: false,
-  wleds: {
-    rswled: {
-      url: 'http://rswled.local',
-      label: 'rswled'
-    }
-  },
+  host: {},
+  nodes: {}
 }
 
 const state = new Proxy(stateTarget, {
@@ -44,27 +40,24 @@ setInterval(async () => {
 
   if (firstRun) {
     firstRun = false
-    await loadStates(state.wleds)
+    state.host = await getState()
+    state.nodes = await getNodes()
   }
 
   const updatePromises = []
 
   if (now - last > int) {
-    for (const label in state.wleds) {
-      const wled = state.wleds[label]
+    const shouldBeOn = state.nightTime
+    const isOn = state.host.on
+    const needsPowerChanged = shouldBeOn != isOn
 
-      const shouldBeOn = state.nightTime
-      const isOn = wled.state.on
-      const needsPowerChanged = shouldBeOn != isOn
+    if (needsPowerChanged) {
+      const updatePromise = new Promise(async (resolve, _reject) => {
+        state.host = await power(shouldBeOn);
+        resolve();
+      })
 
-      if (needsPowerChanged) {
-        const updatePromise = new Promise(async (resolve, _reject) => {
-          wled.state = await power(wled.url, shouldBeOn);
-          resolve();
-        })
-
-        updatePromises.push(updatePromise);
-      }
+      updatePromises.push(updatePromise);
     }
 
     last = now
