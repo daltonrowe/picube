@@ -47,6 +47,9 @@ setInterval(async () => {
     firstRun = false
     state.host = await getState()
     state.nodes = await getNodes()
+
+    console.log(`Host State On: ${state.host.on}`);
+
   }
 
   const updatePromises = []
