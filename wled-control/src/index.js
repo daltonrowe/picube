@@ -24,6 +24,8 @@ const updateNighttime = () => {
   const date = new Date();
   const hours = date.getHours();
 
+  console.log(hours);
+
   state.nightTime = hours > 18 ? false : true;
 };
 
@@ -43,7 +45,7 @@ setInterval(async () => {
 
   if (firstRun) {
     log('First run, getting state.');
-    log(`Host Node: ${process.env.HOST_NODE}`);
+    log(`Host Node: ${process.env.HOST_NODE} | nightTime: ${state.nightTime}`);
     firstRun = false
     state.host = await getState()
     state.nodes = await getNodes()
