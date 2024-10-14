@@ -24,9 +24,7 @@ const updateNighttime = () => {
   const date = new Date();
   const hours = date.getHours();
 
-  console.log(hours);
-
-  state.nightTime = hours > 18 ? false : true;
+  state.nightTime = hours > 18 ? true : false;
 };
 
 updateNighttime();
