@@ -24,13 +24,13 @@ const updateNighttime = () => {
   const date = new Date();
   const hours = date.getHours();
 
-  state.nightTime = hours > 18 ? true : false;
+  state.nightTime = hours >= 18 ? true : false; // 6pm - midnight
 };
 
 updateNighttime();
 
 let last = Date.now()
-let int = 60_000;
+let int = 120_000;
 let firstRun = true
 let running = false;
 
