@@ -63,6 +63,7 @@ setInterval(async () => {
 
     if (needsPowerChanged) {
       const updatePromise = new Promise(async (resolve, _reject) => {
+        log(`Setting power to ${shouldBeOn}`);
         state.host = await power(shouldBeOn);
         resolve();
       })
