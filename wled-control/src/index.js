@@ -5,10 +5,7 @@ require("dotenv").config();
 const { power, getState, getNodes } = require('./api')
 
 function log() {
-  if (process.env.LOG === '1') {
-    console.log(arguments);
-
-  }
+  if (process.env.LOG === '1') console.log(...arguments);
 }
 
 const stateTarget = {
