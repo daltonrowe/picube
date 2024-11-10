@@ -1,7 +1,7 @@
 const fetch = require('node-fetch')
 
-async function post(url, data) {
-  const res = await fetch(`http://${process.env.HOST_NODE}${url}`, {
+async function post(host, url, data) {
+  const res = await fetch(`http://${host}${url}`, {
     method: 'POST',
     headers: {
       "Content-Type": 'application/json'
@@ -12,34 +12,35 @@ async function post(url, data) {
   return await res.json();
 }
 
-async function get(url) {
-  const res = await fetch(`http://${process.env.HOST_NODE}${url}`)
+async function get(host, url) {
+  const res = await fetch(`http://${host}${url}`)
   return await res.json();
 }
 
-async function toggle() {
-  const data = { "on": "t" }
-  return await post(`/json/state`, data)
-}
-
-async function power(bool) {
+async function power(host, bool) {
   const data = { "on": bool }
-  return await post(`/json/state`, data)
+  const { on } = await post(host, `/json/state`, data)
+  return on
 }
 
-async function getState() {
-  return await get(`/json/state`)
-}
+async function getIps() {
+  const ips = {}
 
-async function getNodes() {
-  return await get(`/json/nodes`);
+  const { ip } = await get(process.env.HOST_NODE, `/json/info`)
+  const { on } = await get(ip, '/json/state')
+
+  ips[`${ip}`] = on
+
+  const { nodes } = await get(ip, '/json/nodes')
+
+  for (const node of nodes) {
+    const nodeState = await get(node.ip, '/json/state')
+    ips[`${node.ip}`] = nodeState.on
+  }
+
+  return ips
 }
 
 module.exports = {
-  toggle,
-  power,
-  post,
-  get,
-  getState,
-  getNodes
+  post, get, power, getIps
 }

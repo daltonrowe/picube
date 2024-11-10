@@ -2,16 +2,19 @@
 
 require("dotenv").config();
 
-const { power, getState, getNodes } = require('./api')
+const { getIps, power } = require('./api')
 
 function log() {
   if (process.env.LOG === '1') console.log(...arguments);
 }
 
+function table() {
+  if (process.env.LOG === '1') console.table(...arguments);
+}
+
 const stateTarget = {
-  nightTime: false,
-  host: {},
-  nodes: {}
+  shouldBeOn: false,
+  nodes: {},
 }
 
 const state = new Proxy(stateTarget, {
@@ -20,17 +23,21 @@ const state = new Proxy(stateTarget, {
   },
 })
 
-const updateNighttime = () => {
+const updateShouldBeOn = () => {
   const date = new Date();
   const hours = date.getHours();
 
-  state.nightTime = hours >= 18 ? true : false; // 6pm - midnight
+  const evening = hours >= 18
+  const morning = 6 <= hours <= 8
+
+  state.shouldBeOn = evening || morning
 };
 
-updateNighttime();
+updateShouldBeOn();
 
 let last = Date.now()
-let int = 120_000;
+const interval = parseInt(process.env.CHECK_INTERVAL || 120_000);
+const resolution = parseInt(process.env.CHECK_RESOLUTION || 1000);
 let firstRun = true
 let running = false;
 
@@ -39,36 +46,37 @@ setInterval(async () => {
   running = true
 
   const now = Date.now();
-  updateNighttime();
+  updateShouldBeOn();
 
   if (firstRun) {
-    log('First run, getting state.');
-    log(`Host Node: ${process.env.HOST_NODE} | nightTime: ${state.nightTime}`);
+    log('🔆 First run!');
+    state.nodes = await getIps()
+    table(state.nodes);
     firstRun = false
-    state.host = await getState()
-    state.nodes = await getNodes()
-
-    console.log(`Host State On: ${state.host.on}`);
-
   }
 
   const updatePromises = []
 
-  if (now - last > int) {
-    const shouldBeOn = state.nightTime
-    const isOn = state.host.on
-    const needsPowerChanged = shouldBeOn != isOn
+  if (now - last > interval) {
+    const shouldBeOn = state.shouldBeOn
+    const ips = Object.keys(state.nodes)
 
-    log(`shouldBeOn: ${shouldBeOn} | isOn: ${isOn} | needsPowerChanged: ${needsPowerChanged}`);
+    for (let i = 0; i < ips.length; i++) {
+      const ip = ips[i];
+      const isOn = state.nodes[ip]
+      const needsPowerChanged = shouldBeOn != isOn
 
-    if (needsPowerChanged) {
-      const updatePromise = new Promise(async (resolve, _reject) => {
-        log(`Setting power to ${shouldBeOn}`);
-        state.host = await power(shouldBeOn);
-        resolve();
-      })
+      log(`ip: ${ip} | shouldBeOn: ${shouldBeOn} | isOn: ${isOn} | needsPowerChanged: ${needsPowerChanged}`);
 
-      updatePromises.push(updatePromise);
+      if (needsPowerChanged) {
+        const updatePromise = new Promise(async (resolve, _reject) => {
+          log(`ip: ${ip} setting power to ${shouldBeOn}`);
+          state.nodes[ip] = await power(ip, shouldBeOn);
+          resolve();
+        })
+
+        updatePromises.push(updatePromise);
+      }
     }
 
     last = now
@@ -81,4 +89,4 @@ setInterval(async () => {
   }
 
   running = false
-}, 1000);
+}, resolution);
