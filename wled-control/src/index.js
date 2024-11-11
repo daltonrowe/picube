@@ -28,7 +28,7 @@ const updateShouldBeOn = () => {
   const hours = date.getHours();
 
   const evening = hours >= 18
-  const morning = 6 <= hours <= 8
+  const morning = 6 <= hours && hours <= 8
 
   state.shouldBeOn = evening || morning
 };
