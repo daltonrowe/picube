@@ -5,7 +5,7 @@ import { getBehaviors } from "./behaviors.js"
 const sockExists = fs.existsSync("/tmp/picube.sock");
 if (sockExists) fs.unlinkSync("/tmp/picube.sock");
 
-const connections = [];
+const connections = new Map()
 
 function handlEvent(event) {
   let json;
@@ -24,12 +24,18 @@ function handlEvent(event) {
     const resEvent = { ...res, from: 'broker' }
     const resEventString = JSON.stringify(resEvent)
 
-    connections.forEach(connection => connection.write(resEventString))
+    const connectionsArray = Array.from(connections)
+    console.log(connectionsArray.length);
+
+    connectionsArray.forEach(([, connection]) => {
+      connection.write(resEventString)
+    })
   })
 }
 
 const server = net.createServer((connection) => {
-  connections.push(connection)
+  const stamp = Date.now()
+  connections.set(stamp, connection)
 
   connection.on("data", (data) => {
     const dataString = data.toString()
@@ -37,6 +43,10 @@ const server = net.createServer((connection) => {
 
     eventStrings.forEach(event => handlEvent(event))
   });
+
+  connection.on('close', () => {
+    connections.delete(stamp)
+  })
 });
 
 server.listen("/tmp/picube.sock", () => {

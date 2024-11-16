@@ -6,7 +6,6 @@ import { connect } from '../../broker/src/client.js'
 connect('discord', (event) => {
   console.log('event');
 
-  console.log(event);
 })
 
 const channels = {

@@ -19,8 +19,6 @@ export function connect(name, handleEvent) {
   });
 
   client.on("data", (data) => {
-    console.log('clientdata', name, data.toString());
-
     let json;
 
     try {
