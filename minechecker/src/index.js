@@ -8,6 +8,10 @@ import { RealmAPI } from 'prismarine-realms'
 
 import { ping } from 'bedrock-protocol'
 
+import { connect } from '../../broker/src/client.js'
+
+const send = connect('minechecker')
+
 const { CACHE_DIR, REALM_NAME, BACKUP_DIR } = process.env
 
 const PING_INTERVAL = parseInt(process.env.PING_INTERVAL)
@@ -58,7 +62,12 @@ async function backupRealm(realm) {
 }
 
 async function handleMsLogin(res) {
-  console.log(res);
+  send({
+    name: 'requireMsLogin',
+    data: {
+      message: res.message
+    }
+  })
 }
 
 async function authRealm() {
@@ -92,13 +101,13 @@ let backupRunning = false
 let lastPingTime = 0;
 let pingRunning = false
 
+console.log('starting loop');
+
 setInterval(async () => {
   const now = Date.now()
   const sinceLastBackup = now - lastBackupTime
 
   if (sinceLastBackup > BACKUP_INTERVAL && !backupRunning) {
-    console.log('backing up...');
-
     new Promise(async (resolve) => {
       backupRunning = true;
       await backupRealm(realm)
@@ -111,8 +120,6 @@ setInterval(async () => {
   const sinceLastPing = now - lastPingTime
 
   if (sinceLastPing > PING_INTERVAL && !pingRunning) {
-    console.log('pinging...');
-
     new Promise(async (resolve) => {
       pingRunning = true;
       await checkPlayers(address)

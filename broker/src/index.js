@@ -1,32 +1,47 @@
-const net = require("net");
-const fs = require("fs");
-const { getBehaviors } = require("./behaviors");
+import * as net from "net";
+import * as fs from "fs";
+import { getBehaviors } from "./behaviors.js"
 
 const sockExists = fs.existsSync("/tmp/picube.sock");
 if (sockExists) fs.unlinkSync("/tmp/picube.sock");
 
+const connections = [];
+
+function handlEvent(event) {
+  let json;
+
+  try {
+    json = JSON.parse(event);
+  } catch (error) {
+    // do nothing
+  }
+
+  if (!json || !json.for || json.for !== 'broker') return;
+
+  const responseEvents = getBehaviors(json)
+
+  responseEvents.forEach(res => {
+    const resEvent = { ...res, from: 'broker' }
+    const resEventString = JSON.stringify(resEvent)
+
+    connections.forEach(connection => connection.write(resEventString))
+  })
+}
+
 const server = net.createServer((connection) => {
+  connections.push(connection)
+
   connection.on("data", (data) => {
-    let json;
+    const dataString = data.toString()
+    const eventStrings = dataString.split('\r\n');
 
-    try {
-      json = JSON.parse(data.toString());
-    } catch (error) {
-      // do nothing
-    }
-
-    if (!json) return;
-    if (json.for !== 'broker') return;
-
-    const responseEvents = getBehaviors(json)
-
-    responseEvents.forEach(res => {
-      connection.write(JSON.stringify(res))
-    })
+    eventStrings.forEach(event => handlEvent(event))
   });
 });
 
-server.listen("/tmp/picube.sock", () => { });
+server.listen("/tmp/picube.sock", () => {
+  console.log('☎️ Broker listening...');
+});
 
 function exitGracefully() {
   server.close();

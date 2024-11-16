@@ -1,21 +1,26 @@
-const net = require("net");
+import * as net from "net"
 
-let client;
+let client
+let send
 
 export function connect(name, handleEvent) {
   client = net.createConnection("/tmp/picube.sock", () => {
     const onlineEvent = {
       for: 'broker',
+      from: name,
       name: 'serviceOnline',
-      data: {
-        name,
-      }
     };
 
     client.write(JSON.stringify(onlineEvent));
+  })
+
+  client.on('error', function (ex) {
+    console.log(`Error from client ${name} communicating with broker socket`);
   });
 
   client.on("data", (data) => {
+    console.log('clientdata', name, data.toString());
+
     let json;
 
     try {
@@ -27,10 +32,25 @@ export function connect(name, handleEvent) {
     if (!json) return;
     if (json.for !== name) return;
 
-    handleEvent(json)
+    if (handleEvent) handleEvent(json)
   });
 
   client.on("end", () => {
-    console.log(`Disconnected ${name} from broker socket`);
+    console.log(`Disconnected client ${name} from broker socket`);
   });
+
+  if (!send) {
+    send = (json) => {
+      json.from = name;
+      json.for = 'broker'
+
+      try {
+        client.write(`${JSON.stringify(json)}\r\n`)
+      } catch (error) {
+        console.log(`Error from client ${name} writing to broker socket`);
+      }
+    }
+  }
+
+  return send
 }

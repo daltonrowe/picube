@@ -1,6 +1,13 @@
-require("dotenv").config();
+import 'dotenv/config'
 
-const { Client, Events, GatewayIntentBits } = require("discord.js");
+import { Client, Events, GatewayIntentBits } from "discord.js"
+import { connect } from '../../broker/src/client.js'
+
+connect('discord', (event) => {
+  console.log('event');
+
+  console.log(event);
+})
 
 const channels = {
   "1277604617680846881": "picube-general",

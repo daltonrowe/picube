@@ -6,9 +6,23 @@
 //   }
 // }
 
-export const getBehaviors = (event) => {
-  const { name } = event
-  switch (name) {
+export function getBehaviors(event) {
+  const { name, from } = event
+  const behaviorKey = `${from}-${name}`
+
+  if (name === 'serviceOnline') return [];
+
+  switch (behaviorKey) {
+    case 'minechecker-requireMsLogin': {
+      return [{
+        for: 'discord',
+        name: 'sendMessage',
+        data: {
+          message: event.data.message
+        }
+      }]
+    }
+
     case 'minechecker-players': {
       const lightsEvent = {
         for: 'lights',
@@ -30,6 +44,7 @@ export const getBehaviors = (event) => {
     }
 
     default:
+      console.log("Unhandled broker event:", event);
       return []
   }
 }
