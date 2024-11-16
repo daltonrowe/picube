@@ -32,7 +32,7 @@ function getLastBackupStored() {
   const backupsStored = fs.readdirSync(path.join('.', BACKUP_DIR))
 
   if (backupsStored && backupsStored.length) {
-    const latestStored = backupsStored.slice(-1);
+    const [latestStored] = backupsStored.slice(-1);
     lastBackupStored = latestStored
   }
 }
@@ -50,7 +50,7 @@ async function downloadBackup(backup) {
   send({
     name: 'backup',
     data: {
-      file: filename
+      message: `${REALM_NAME} backup complete`
     }
   })
 
@@ -59,8 +59,12 @@ async function downloadBackup(backup) {
 
 async function backupRealm(realm) {
   const [latestBackup] = await realm.getBackups()
+  const latestFile = formatBackupFilename(latestBackup)
 
-  if (lastBackupStored === formatBackupFilename(latestBackup)) {
+  console.log(lastBackupStored);
+  console.log(latestFile);
+
+  if (lastBackupStored === latestFile) {
     console.log(`Most recent backup already stored: ${lastBackupStored}`);
     return
   }

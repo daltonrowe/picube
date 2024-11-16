@@ -34,7 +34,7 @@ export function getBehaviors(event) {
         name: 'sendMessage',
         data: {
           channel: 'picube-general',
-          message: `${event.data.file} backup complete`
+          message: event.data.message
         }
       };
       return [discordEvent]
@@ -45,30 +45,11 @@ export function getBehaviors(event) {
         for: 'discord',
         name: 'sendMessage',
         data: {
+          channel: 'picube-general',
           message: `${event.data.count} bob cat bois online`
         }
       };
       return [discordEvent]
-    }
-
-    case 'minechecker-players': {
-      const lightsEvent = {
-        for: 'lights',
-        name: 'setTempEffect',
-        data: {
-          duration: 5,
-          color: [0, 255, 0]
-        }
-      };
-
-      const discordEvent = {
-        for: 'discord',
-        name: 'sendMessage',
-        data: {
-          message: event.data.message
-        }
-      };
-      return [lightsEvent, discordEvent]
     }
 
     default:
