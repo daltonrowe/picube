@@ -1,14 +1,36 @@
 const net = require("net");
 
-const client = net.createConnection("/tmp/picube.sock", () => {
-  const payload = {
-    event: "registration",
-    name: "picubeTestClient",
-  };
+let client;
 
-  client.write(JSON.stringify(payload));
-});
+export function connect(name, handleEvent) {
+  client = net.createConnection("/tmp/picube.sock", () => {
+    const onlineEvent = {
+      for: 'broker',
+      name: 'serviceOnline',
+      data: {
+        name,
+      }
+    };
 
-client.on("end", () => {
-  console.log("disconnected from server");
-});
+    client.write(JSON.stringify(onlineEvent));
+  });
+
+  client.on("data", (data) => {
+    let json;
+
+    try {
+      json = JSON.parse(data.toString());
+    } catch (error) {
+      // do nothing
+    }
+
+    if (!json) return;
+    if (json.for !== name) return;
+
+    handleEvent(json)
+  });
+
+  client.on("end", () => {
+    console.log(`Disconnected ${name} from broker socket`);
+  });
+}

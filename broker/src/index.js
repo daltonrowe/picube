@@ -1,11 +1,9 @@
 const net = require("net");
 const fs = require("fs");
+const { getBehaviors } = require("./behaviors");
 
 const sockExists = fs.existsSync("/tmp/picube.sock");
 if (sockExists) fs.unlinkSync("/tmp/picube.sock");
-
-const clients = new Map();
-const subs = new Map();
 
 const server = net.createServer((connection) => {
   connection.on("data", (data) => {
@@ -18,17 +16,13 @@ const server = net.createServer((connection) => {
     }
 
     if (!json) return;
+    if (json.for !== 'broker') return;
 
-    if (json.event === "registration" && !clients.get(json.name)) {
-      clients.set(connection, json.name);
-      console.log(`new client: ${json.name}`);
-    }
+    const responseEvents = getBehaviors(json)
 
-    if (json.event === "subscribe") {
-
-      subs.set(json.name, connection);
-      console.log(`new client: ${json.name}`);
-    }
+    responseEvents.forEach(res => {
+      connection.write(JSON.stringify(res))
+    })
   });
 });
 
