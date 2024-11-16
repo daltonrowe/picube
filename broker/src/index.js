@@ -25,7 +25,6 @@ function handlEvent(event) {
     const resEventString = JSON.stringify(resEvent)
 
     const connectionsArray = Array.from(connections)
-    console.log(connectionsArray.length);
 
     connectionsArray.forEach(([, connection]) => {
       connection.write(resEventString)

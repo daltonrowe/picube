@@ -47,6 +47,13 @@ async function downloadBackup(backup) {
 
   fs.writeFileSync(path.join('.', BACKUP_DIR, filename), buffer)
 
+  send({
+    name: 'backup',
+    data: {
+      file: filename
+    }
+  })
+
   lastBackupStored = filename
 }
 
@@ -79,6 +86,13 @@ async function authRealm() {
   const realm = realms.find(r => r.name === REALM_NAME)
   const address = await realm.getAddress()
 
+  send({
+    name: 'realmFound',
+    data: {
+      realm: REALM_NAME
+    }
+  })
+
   return { realm, address }
 }
 
@@ -89,7 +103,13 @@ async function pingRealm(address) {
 
 async function checkPlayers(address) {
   const advertisment = await pingRealm(address)
-  console.log(advertisment);
+
+  send({
+    name: 'players',
+    data: {
+      count: advertisment.playersOnline
+    }
+  })
 }
 
 getLastBackupStored()
@@ -100,8 +120,6 @@ let backupRunning = false
 
 let lastPingTime = 0;
 let pingRunning = false
-
-console.log('starting loop');
 
 setInterval(async () => {
   const now = Date.now()
@@ -122,9 +140,14 @@ setInterval(async () => {
   if (sinceLastPing > PING_INTERVAL && !pingRunning) {
     new Promise(async (resolve) => {
       pingRunning = true;
-      await checkPlayers(address)
-      pingRunning = false;
 
+      try {
+        await checkPlayers(address)
+      } catch (error) {
+        // do nothing
+      }
+
+      pingRunning = false;
       lastPingTime = now
       resolve();
     })

@@ -1,11 +1,3 @@
-// const _exampleEvent = {
-//   for: 'broker',
-//   name: 'minechecker-players',
-//   data: {
-//     message: '5 players online'
-//   }
-// }
-
 export function getBehaviors(event) {
   const { name, from } = event
   const behaviorKey = `${from}-${name}`
@@ -24,6 +16,41 @@ export function getBehaviors(event) {
       }]
     }
 
+    case 'minechecker-realmFound': {
+      const discordEvent = {
+        for: 'discord',
+        name: 'sendMessage',
+        data: {
+          channel: 'picube-general',
+          message: `${event.data.realm} successfully connected!`
+        }
+      };
+      return [discordEvent]
+    }
+
+    case 'minechecker-backup': {
+      const discordEvent = {
+        for: 'discord',
+        name: 'sendMessage',
+        data: {
+          channel: 'picube-general',
+          message: `${event.data.file} backup complete`
+        }
+      };
+      return [discordEvent]
+    }
+
+    case 'minechecker-players': {
+      const discordEvent = {
+        for: 'discord',
+        name: 'sendMessage',
+        data: {
+          message: `${event.data.count} bob cat bois online`
+        }
+      };
+      return [discordEvent]
+    }
+
     case 'minechecker-players': {
       const lightsEvent = {
         for: 'lights',
@@ -34,14 +61,14 @@ export function getBehaviors(event) {
         }
       };
 
-      const pingerEvent = {
+      const discordEvent = {
         for: 'discord',
         name: 'sendMessage',
         data: {
           message: event.data.message
         }
       };
-      return [lightsEvent, pingerEvent]
+      return [lightsEvent, discordEvent]
     }
 
     default:
