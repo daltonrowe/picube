@@ -18,6 +18,7 @@ export function getBehaviors(event) {
         for: 'discord',
         name: 'sendMessage',
         data: {
+          channel: 'picube-general',
           message: event.data.message
         }
       }]
