@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "rpi-softspi": "^1.0.5",
     "rpi-ws281x-native": "1.0.4"
   }
 }
